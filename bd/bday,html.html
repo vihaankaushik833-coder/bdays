@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Bae! 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --cherry-red: #D2143A;
+            --deep-cherry: #8B0000;
+            --bright-cherry: #FF1E43;
+            --rose-accent: #FFB7C5;
+            --soft-pink: #FFF0F3;
+            --gold: #FFD700;
+            --text-dark: #4A0E17;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #2b0008, #5c0011, #8b001a, #2b0008);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            padding-bottom: 60px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Ambient floating hearts */
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatUp 6s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        /* Identity Overlay Modal */
+        #intro-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(20, 0, 5, 0.92);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .intro-card {
+            background: linear-gradient(145deg, #ffffff, #ffe6ea);
+            border: 3px solid var(--cherry-red);
+            border-radius: 24px;
+            padding: 35px 25px;
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(210, 20, 58, 0.4);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .intro-card h2 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--cherry-red);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .intro-card p {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            min-height: 140px;
+            justify-content: center;
+        }
+
+        .intro-btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 80%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .btn-manisha {
+            background: #f0f0f0;
+            color: #555;
+            border: 2px solid #ccc;
+        }
+
+        .btn-bae {
+            background: linear-gradient(45deg, var(--cherry-red), var(--bright-cherry));
+            color: white;
+            box-shadow: 0 5px 20px rgba(210, 20, 58, 0.5);
+        }
+
+        .toast-msg {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--cherry-red);
+            font-weight: 600;
+            min-height: 24px;
+        }
+
+        /* Container & Header */
+        .container {
+            max-width: 900px;
+            width: 92%;
+            margin-top: 30px;
+            z-index: 2;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: var(--rose-accent);
+            text-shadow: 0 0 15px rgba(255, 183, 197, 0.6), 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Side-by-Side Hero Section & Carousel */
+        .hero-card {
+            background: rgba(255, 240, 243, 0.95);
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 3px solid var(--rose-accent);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .carousel-wrapper {
+            flex: 1;
+            min-width: 260px;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .photo-frame {
+            position: relative;
+            width: 100%;
+            border-radius: 20px;
+            padding: 10px;
+            background: linear-gradient(145deg, var(--cherry-red), var(--deep-cherry));
+            box-shadow: 0 10px 25px rgba(139, 0, 0, 0.4);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 340px;
+            border-radius: 14px;
+            display: block;
+            object-fit: cover;
+            transition: opacity 0.4s ease;
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(210, 20, 58, 0.75);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: background 0.2s;
+            z-index: 5;
+        }
+
+        .nav-btn:hover {
+            background: var(--bright-cherry);
+        }
+
+        .nav-prev { left: -12px; }
+        .nav-next { right: -12px; }
+
+        .dots-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #d0a0aa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: var(--cherry-red);
+            transform: scale(1.3);
+        }
+
+        .boss-greeting {
+            flex: 1.2;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .boss-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.4rem;
+            color: var(--cherry-red);
+            line-height: 1.2;
+        }
+
+        .boss-msg {
+            font-size: 1.15rem;
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-weight: 500;
+            min-height: 60px;
+            transition: opacity 0.3s ease;
+        }
+
+        .lily-icon-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+            background: rgba(210, 20, 58, 0.08);
+            padding: 12px 18px;
+            border-radius: 16px;
+            border-left: 4px solid var(--cherry-red);
+        }
+
+        .lily-svg {
+            width: 45px;
+            height: 45px;
+            flex-shrink: 0;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+        }
+
+        /* Zooming Pink Lily Bouquet Section */
+        .bouquet-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .bouquet-container {
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .bouquet-container:hover {
+            transform: scale(1.05);
+        }
+
+        .bouquet-container.zoomed {
+            transform: scale(1.4) translateY(-10px);
+            z-index: 100;
+        }
+
+        .bouquet-tag {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #fff, #ffe6ea);
+            color: var(--cherry-red);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(210, 20, 58, 0.3);
+            border: 1px solid var(--rose-accent);
+            white-space: nowrap;
+        }
+
+        /* Handwritten Poem Parchment Notes */
+        .poem-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .poem-note {
+            flex: 1;
+            min-width: 280px;
+            background: #fffdf5;
+            background-image: linear-gradient(#e8e4d9 1px, transparent 1px);
+            background-size: 100% 28px;
+            border-radius: 12px;
+            padding: 35px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 0 20px rgba(0,0,0,0.05);
+            position: relative;
+            border: 1px solid #e0dacf;
+            transform: rotate(-1deg);
+        }
+
+        .poem-wrapper:nth-child(even) .poem-note {
+            transform: rotate(1deg);
+        }
+
+        .poem-note::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: rgba(255, 183, 197, 0.5);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .poem-content {
+            font-family: 'Caveat', cursive;
+            font-size: 1.65rem;
+            color: #2b1116;
+            line-height: 28px;
+            text-align: center;
+            white-space: pre-line;
+        }
+
+        .poem-side-note {
+            background: rgba(255, 240, 243, 0.9);
+            border: 2px dashed var(--cherry-red);
+            border-radius: 18px;
+            padding: 15px 22px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: var(--cherry-red);
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        /* Cake Section */
+        .cake-card {
+            background: rgba(255, 240, 243, 0.95);
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+            border: 2px solid var(--rose-accent);
+        }
+
+        .cake-svg {
+            width: 160px;
+            height: 160px;
+            cursor: pointer;
+            margin: 15px auto;
+        }
+
+        .candle-flame {
+            animation: flicker 0.8s infinite alternate;
+            transform-origin: center;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+            100% { transform: scale(1.15) rotate(2deg); opacity: 1; }
+        }
+
+        /* Final Wish Banner */
+        .final-wish-card {
+            background: linear-gradient(135deg, var(--cherry-red), var(--deep-cherry));
+            color: white;
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(139, 0, 0, 0.5);
+            border: 2px solid var(--rose-accent);
+        }
+
+        .final-wish-card h3 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--rose-accent);
+            margin-bottom: 10px;
+        }
+
+        .final-wish-card p {
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient floating background hearts -->
+    <script>
+        for(let i=0; i<15; i++) {
+            let heart = document.createElement('div');
+            heart.className = 'heart-particle';
+            heart.innerHTML = ['💖','🌸','✨','💕'][Math.floor(Math.random()*4)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            document.body.appendChild(heart);
+        }
+    </script>
+
+    <!-- Identity Verification Modal -->
+    <div id="intro-modal">
+        <div class="intro-card">
+            <h2>Who are you? 🌸</h2>
+            <p>Please confirm your identity to proceed!</p>
+            <div class="btn-group">
+                <button class="intro-btn btn-manisha" id="btn-manisha" onclick="handleManishaClick()">I'm Manisha 🌸</button>
+                <button class="intro-btn btn-bae" id="btn-bae" onclick="unlockPage()">I'm Bae 💖</button>
+            </div>
+            <div class="toast-msg" id="toast-msg"></div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        
+        <header>
+            <h1>Happy Birthday, Bae! 👑✨</h1>
+        </header>
+
+        <!-- Side-by-Side Hero Section with 3-Photo Carousel -->
+        <div class="hero-card">
+            <div class="carousel-wrapper">
+                <div class="photo-frame">
+                    <button class="nav-btn nav-prev" onclick="prevPhoto()">&#10094;</button>
+                    <img id="carousel-img" src="iji.jpg" alt="Photo 1" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80';">
+                    <button class="nav-btn nav-next" onclick="nextPhoto()">&#10095;</button>
+                </div>
+                <div class="dots-container">
+                    <span class="dot active" onclick="goToPhoto(0)"></span>
+                    <span class="dot" onclick="goToPhoto(1)"></span>
+                    <span class="dot" onclick="goToPhoto(2)"></span>
+                </div>
+            </div>
+
+            <div class="boss-greeting">
+                <div class="boss-title">Happy Birthday Boss! 💖</div>
+                <div class="boss-msg" id="dynamic-caption">
+                    happy birthday boss, and accept bouquet of pink lily from this lowly being 🌸
+                </div>
+                <div class="lily-icon-wrap">
+                    <svg class="lily-svg" viewBox="0 0 100 100">
+                        <path d="M50 80 Q40 50 20 40 Q45 40 50 10 Q55 40 80 40 Q60 50 50 80 Z" fill="#FFB7C5" stroke="#D2143A" stroke-width="2"/>
+                        <circle cx="50" cy="40" r="5" fill="#FFD700"/>
+                    </svg>
+                    <span style="font-size: 0.95rem; color: var(--cherry-red); font-weight: 600;">Fresh Pink Lily for You 🌸</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zooming Pink Lily Bouquet -->
+        <div class="bouquet-section">
+            <div class="bouquet-container" id="bouquet" onclick="zoomBouquet()">
+                <svg width="220" height="220" viewBox="0 0 200 200">
+                    <!-- Stems -->
+                    <path d="M100 180 Q90 140 70 100 M100 180 Q100 130 100 90 M100 180 Q110 140 130 100" stroke="#2e7d32" stroke-width="5" fill="none" stroke-linecap="round"/>
+                    <!-- Leaves -->
+                    <path d="M85 150 Q60 140 65 120 Q80 130 85 150 Z" fill="#4caf50"/>
+                    <path d="M115 150 Q140 140 135 120 Q120 130 115 150 Z" fill="#4caf50"/>
+                    <!-- Pink Lily Blooms -->
+                    <g transform="translate(70, 90)">
+                        <path d="M0 0 Q-25 -25 0 -50 Q25 -25 0 0 Z" fill="#FF99B2"/>
+                        <path d="M0 0 Q-40 0 -25 -25 Q0 -10 0 0 Z" fill="#FFB7C5"/>
+                        <path d="M0 0 Q40 0 25 -25 Q0 -10 0 0 Z" fill="#FFB7C5"/>
+                        <circle cx="0" cy="-20" r="3" fill="#FFD700"/>
+                    </g>
+                    <g transform="translate(130, 90)">
+                        <path d="M0 0 Q-25 -25 0 -50 Q25 -25 0 0 Z" fill="#FF99B2"/>
+                        <path d="M0 0 Q-40 0 -25 -25 Q0 -10 0 0 Z" fill="#FFB7C5"/>
+                        <path d="M0 0 Q40 0 25 -25 Q0 -10 0 0 Z" fill="#FFB7C5"/>
+                        <circle cx="0" cy="-20" r="3" fill="#FFD700"/>
+                    </g>
+                    <g transform="translate(100, 60)">
+                        <path d="M0 0 Q-30 -30 0 -60 Q30 -30 0 0 Z" fill="#FF6688"/>
+                        <path d="M0 0 Q-50 0 -30 -30 Q0 -15 0 0 Z" fill="#FF809B"/>
+                        <path d="M0 0 Q50 0 30 -30 Q0 -15 0 0 Z" fill="#FF809B"/>
+                        <circle cx="0" cy="-25" r="4" fill="#FFD700"/>
+                    </g>
+                    <!-- Bow Ribbon -->
+                    <path d="M100 170 Q85 160 80 175 Q95 175 100 170 Z" fill="#D2143A"/>
+                    <path d="M100 170 Q115 160 120 175 Q105 175 100 170 Z" fill="#D2143A"/>
+                    <circle cx="100" cy="170" r="5" fill="#FF1E43"/>
+                </svg>
+                <div class="bouquet-tag">Only for u cutie 🌸💖</div>
+            </div>
+            <p style="color: var(--rose-accent); font-size: 0.9rem; margin-top: 10px;">(Tap the bouquet to bring it closer!)</p>
+        </div>
+
+        <!-- Handwritten Poem Note 1 -->
+        <div class="poem-wrapper">
+            <div class="poem-note">
+                <div class="poem-content">
+I am happy today,
+but didn't understand the reason of it.
+people it's another day,
+still i am making fuss of it.
+
+These imbeciles need to know it's an very special day,
+It's a day that's worth celebrating for,
+as it's your birthday.
+
+even almighty is blessed by bringing someone like you in this world
+                </div>
+            </div>
+        </div>
+
+        <!-- Handwritten Poem Note 2 with Side Note -->
+        <div class="poem-wrapper">
+            <div class="poem-note">
+                <div class="poem-content">
+I may become good by working as protoge,
+but will never be able to reach the level of prodigy.
+Their is vast distance between us-
+which can be covered by path
+which is yet to be found ,
+but i need to find that path as i need the prodigy to be one and only protoge.
+                </div>
+            </div>
+            <div class="poem-side-note">
+                this was for u my prodigy 💖
+            </div>
+        </div>
+
+        <!-- Birthday Cake Section -->
+        <div class="cake-card">
+            <h2 style="font-family: 'Dancing Script', cursive; color: var(--cherry-red); font-size: 2.2rem;">Make a Wish & Tap the Candle! 🎂</h2>
+            <svg class="cake-svg" viewBox="0 0 100 100" onclick="blowCandle()">
+                <!-- Cake Base -->
+                <rect x="20" y="60" width="60" height="30" rx="4" fill="#F4A460"/>
+                <rect x="15" y="55" width="70" height="10" rx="3" fill="#D2143A"/>
+                <path d="M15 55 Q20 62 25 55 Q30 62 35 55 Q40 62 45 55 Q50 62 55 55 Q60 62 65 55 Q70 62 75 55 Q80 62 85 55" fill="#FFF0F3"/>
+                <!-- Candle -->
+                <rect x="47" y="35" width="6" height="20" fill="#FFB7C5"/>
+                <!-- Flame -->
+                <path id="flame" class="candle-flame" d="M50 22 Q45 30 50 35 Q55 30 50 22 Z" fill="#FFD700"/>
+            </svg>
+            <p id="cake-status" style="color: var(--cherry-red); font-weight: 600;">The candle is glowing bright ✨</p>
+        </div>
+
+        <!-- Final Wishing Note -->
+        <div class="final-wish-card">
+            <h3>With All My Love 💖</h3>
+            <p>may year be happy and healthy for you ,mwaah 💖</p>
+        </div>
+
+    </div>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Photo Carousel & Dynamic Notes Configuration
+        const galleryData = [
+            {
+                src: 'iji.jpg',
+                fallback: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
+                note: 'happy birthday boss, and accept bouquet of pink lily from this lowly being 🌸'
+            },
+            {
+                src: 'mii.jpg',
+                fallback: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80',
+                note: 'pretty girl with changre changre baal 💇‍♀️💖✨'
+            },
+            {
+                src: 'iii.jpg',
+                fallback: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80',
+                note: 'to my bmw lover 🚗💨💖'
+            }
+        ];
+
+        let currentIdx = 0;
+
+        function updateGallery() {
+            const imgEl = document.getElementById('carousel-img');
+            const captionEl = document.getElementById('dynamic-caption');
+            const dots = document.querySelectorAll('.dot');
+
+            imgEl.style.opacity = 0;
+            captionEl.style.opacity = 0;
+
+            setTimeout(() => {
+                imgEl.src = galleryData[currentIdx].src;
+                imgEl.onerror = () => { imgEl.src = galleryData[currentIdx].fallback; };
+                captionEl.innerText = galleryData[currentIdx].note;
+
+                imgEl.style.opacity = 1;
+                captionEl.style.opacity = 1;
+            }, 200);
+
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === currentIdx);
+            });
+        }
+
+        function nextPhoto() {
+            currentIdx = (currentIdx + 1) % galleryData.length;
+            updateGallery();
+        }
+
+        function prevPhoto() {
+            currentIdx = (currentIdx - 1 + galleryData.length) % galleryData.length;
+            updateGallery();
+        }
+
+        function goToPhoto(index) {
+            currentIdx = index;
+            updateGallery();
+        }
+
+        // Manisha vs Bae Button Interaction Logic
+        let baeScale = 1;
+        let manishaClickCount = 0;
+        const manishaPhrases = [
+            "Are you sure you're not Bae? 😉",
+            "100% sure? Bae looks way better! 💖",
+            "Nice try, but you're definitely Bae! 🥰",
+            "Stop playing! Tap the Bae button! 👑"
+        ];
+
+        function handleManishaClick() {
+            const toast = document.getElementById('toast-msg');
+            const baeBtn = document.getElementById('btn-bae');
+            
+            toast.innerText = manishaPhrases[manishaClickCount % manishaPhrases.length];
+            manishaClickCount++;
+            
+            baeScale += 0.25;
+            baeBtn.style.transform = `scale(${baeScale})`;
+            baeBtn.style.boxShadow = `0 5px ${15 * baeScale}px rgba(210, 20, 58, 0.8)`;
+        }
+
+        function unlockPage() {
+            document.getElementById('intro-modal').style.display = 'none';
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 }
+            });
+            startHumanMelody();
+        }
+
+        function zoomBouquet() {
+            const bq = document.getElementById('bouquet');
+            bq.classList.toggle('zoomed');
+            confetti({
+                particleCount: 50,
+                spread: 60,
+                origin: { y: 0.5 }
+            });
+        }
+
+        function blowCandle() {
+            const flame = document.getElementById('flame');
+            const status = document.getElementById('cake-status');
+            if (flame.style.display !== 'none') {
+                flame.style.display = 'none';
+                status.innerText = "You blew out the candle! May all your wishes come true! 🎉✨";
+                confetti({
+                    particleCount: 150,
+                    spread: 100,
+                    origin: { y: 0.7 }
+                });
+            } else {
+                flame.style.display = 'block';
+                status.innerText = "The candle is glowing bright ✨";
+            }
+        }
+
+        /* Continuous Human-Touch Music Engine */
+        let audioCtx;
+        
+        function startHumanMelody() {
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                const song = [
+                    { freq: 261.63, duration: 0.6, delay: 0.0 },
+                    { freq: 293.66, duration: 0.6, delay: 0.65 },
+                    { freq: 329.63, duration: 0.9, delay: 1.3 },
+                    { freq: 349.23, duration: 0.6, delay: 2.25 },
+                    { freq: 392.00, duration: 1.1, delay: 2.9 },
+                    { freq: 329.63, duration: 0.7, delay: 4.1 },
+                    { freq: 440.00, duration: 0.9, delay: 4.85 },
+                    { freq: 392.00, duration: 1.3, delay: 5.8 }
+                ];
+
+                let noteIndex = 0;
+
+                function playNextNote() {
+                    let noteData = song[noteIndex];
+                    let humanTimingOffset = (Math.random() * 0.05 - 0.025);
+                    
+                    playHumanTone(noteData.freq, noteData.duration);
+                    
+                    noteIndex = (noteIndex + 1) % song.length;
+                    
+                    let nextDelay = (song[noteIndex].delay - noteData.delay) + humanTimingOffset;
+                    if (nextDelay < 0.4) nextDelay = 0.5;
+                    
+                    setTimeout(playNextNote, nextDelay * 1000);
+                }
+
+                playNextNote();
+            } catch(e) {}
+        }
+
+        function playHumanTone(freq, duration) {
+            if (!audioCtx) return;
+            
+            let now = audioCtx.currentTime;
+
+            let osc1 = audioCtx.createOscillator();
+            let gain1 = audioCtx.createGain();
+            osc1.type = 'triangle';
+            osc1.frequency.setValueAtTime(freq, now);
+
+            let osc2 = audioCtx.createOscillator();
+            let gain2 = audioCtx.createGain();
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(freq * 2, now);
+
+            let velocity = 0.08 + Math.random() * 0.03;
+            
+            gain1.gain.setValueAtTime(0, now);
+            gain1.gain.linearRampToValueAtTime(velocity, now + 0.04);
+            gain1.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+            gain2.gain.setValueAtTime(0, now);
+            gain2.gain.linearRampToValueAtTime(velocity * 0.25, now + 0.03);
+            gain2.gain.exponentialRampToValueAtTime(0.0001, now + (duration * 0.7));
+
+            osc1.connect(gain1);
+            osc2.connect(gain2);
+            gain1.connect(audioCtx.destination);
+            gain2.connect(audioCtx.destination);
+
+            osc1.start(now);
+            osc2.start(now);
+            osc1.stop(now + duration);
+            osc2.stop(now + duration);
+        }
+    </script>
+</body>
+</html>
